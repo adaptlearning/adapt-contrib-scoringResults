@@ -1,0 +1,61 @@
+// components.json
+{
+  "_id": "c-05",
+  "_parentId": "b-05",
+  "_type": "component",
+  "_component": "scoringResults",
+  "_classes": "",
+  "_layout": "full",
+  "title": "Results",
+  "displayTitle": "Results",
+  "body": "This component you're reading is a results component.",
+  "instruction": "",
+  "_setId": "assessment-05",
+  "_subsetsQuery": "",
+  "_isVisibleBeforeCompletion": true,
+  "_comment": "setCompletionOn = inview | pass",
+  "_setCompletionOn": "inview",
+  "_comment": "_resetType = inherit | hard | soft",
+  "_resetType": "inherit",
+  "_retry": {
+    "button": "Retry",
+    "feedback": "Why not have another try? You have used {{attemptsSpent}} of {{attempts}} attempt(s), which means you have {{attemptsLeft}} attempt(s) remaining.",
+    "_confirmationPrompt": {
+      "_isEnabled": false,
+      "title": "",
+      "body": "Are you sure you want to try again? Remember, your scores will be reset and you must interact with all content again.",
+      "_buttons": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    }
+  },
+  "_completionBody" : "This component you're reading is a results component.<br>You have finished the assessment.<br>You scored {{{score}}} out of {{{maxScore}}}. {{{feedback}}}",
+  "_isBandsScoreScaled": true,
+  "_bands": [
+    {
+      "_score": 0,
+      "feedback": "Your score was below 25%.",
+      "_allowRetry": true
+    },
+    {
+      "_score": 25,
+      "feedback": "Your score was below 50%.",
+      "_allowRetry": true
+    },
+    {
+      "_score": 50,
+      "feedback": "Good effort, but your score was under 75%.",
+      "_allowRetry": true
+    },
+    {
+      "_score": 75,
+      "feedback": "Great work. You passed your assessment with {{{scoreAsPercent}}}%.",
+      "_allowRetry": false,
+      "_classes": "high-score"
+    }
+  ],
+  "_pageLevelProgress": {
+    "_isEnabled": true
+  }
+}

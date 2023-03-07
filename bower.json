@@ -1,0 +1,17 @@
+{
+  "name": "adapt-contrib-scoringResults",
+  "version": "0.0.1",
+  "framework": ">=5.20",
+  "homepage": "https://github.com/adaptlearning/adapt-contrib-scoringResults",
+  "bugs": "https://github.com/adaptlearning/adapt-contrib-scoringResults/issues",
+  "component" : "scoringResults",
+  "targetAttribute": "_scoringResults",
+  "displayName" : "Scoring Results",
+  "description": "A component used to display banded feedback for a scoring set",
+  "main": "/js/adapt-contrib-scoringResults.js",
+  "keywords": [
+    "adapt-plugin",
+    "adapt-component"
+  ],
+  "license": "GPL-3.0"
+}

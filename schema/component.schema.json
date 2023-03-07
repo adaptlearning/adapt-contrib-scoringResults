@@ -1,0 +1,212 @@
+{
+  "$anchor": "scoringResults-component",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "$merge": {
+    "source": {
+      "$ref": "component"
+    },
+    "with": {
+      "properties": {
+        "_supportedLayout": {
+          "type": "string",
+          "title": "Supported layout",
+          "default": "half-width",
+          "enum": [
+            "full-width",
+            "half-width",
+            "both"
+          ],
+          "_adapt": {
+            "editorOnly": true
+          }
+        },
+        "instruction": {
+          "type": "string",
+          "title": "Instruction",
+          "default": "",
+          "_adapt": {
+            "translatable": true
+          }
+        },
+        "_setId": {
+          "type": "string",
+          "title": "Scoring set ID",
+          "description": "The scoring set ID to check for completion. Leave empty to use the Scoring API instead",
+          "default": ""
+        },
+        "_subsetsQuery": {
+          "type": "string",
+          "title": "Scoring set intersection query",
+          "description": "A query used to additionally filter scoring subsets into the results. The `_setId` will be automatically prepended to the query, so this value should only include subsets. Leave empty if additional filtering is not required",
+          "default": ""
+        },
+        "_isVisibleBeforeCompletion": {
+          "type": "boolean",
+          "title": "Show before scoring set completion",
+          "description": "Determines whether this component will be visible or hidden prior to the associated scoring set having been completed",
+          "default": true
+        },
+        "_setCompletionOn": {
+          "type": "string",
+          "title": "Completion criterion",
+          "description": "Set to 'pass' to have the component mark as completed only if the learner passed the associated scoring set",
+          "default": "inview",
+          "enum": [
+            "inview",
+            "pass"
+          ],
+          "_backboneForms": "Select"
+        },
+        "_resetType": {
+          "type": "string",
+          "title": "Reset type",
+          "description": "Set to `\"inherit\"` to use the same reset type as the associated scoring set. Set to `\"hard\"` to have the component's completion reset if/when the scoring set(s) are reset. Set to `\"soft\"` if you don't want completion to be reset",
+          "default": "inherit",
+          "enum": [
+            "inherit",
+            "hard",
+            "soft"
+          ],
+          "_backboneForms": "Select"
+        },
+        "_retry": {
+          "type": "object",
+          "title": "Retry",
+          "description": "The settings used to configure the reset display",
+          "default": {},
+          "properties": {
+            "button": {
+              "type": "string",
+              "title": "Retry button text",
+              "default": "Retry",
+              "_adapt": {
+                "translatable": true
+              }
+            },
+            "feedback": {
+              "type": "string",
+              "title": "Retry feedback",
+              "description": "This text is displayed only when every filtered scoring set can be reset. It can use the following variables: `{{{score}}}`, `{{{maxScore}}}`, `{{{scaledScore}}}`. If the associated scoring set contains attempts logic, `{{attemptsSpent}}`, `{{attempts}}`, `{{attemptsLeft}}` can also be used",
+              "default": "",
+              "_adapt": {
+                "translatable": true
+              },
+              "_backboneForms": "TextArea"
+            },
+            "_confirmationPrompt": {
+              "type": "object",
+              "title": "Confirmation prompt",
+              "description": "The settings used to configure the reset confirmation prompt",
+              "default": {},
+              "properties": {
+                "_isEnabled": {
+                  "type": "boolean",
+                  "title": "Enable confirmation prompt",
+                  "description": "Determines whether to show a confirmation prompt before resetting",
+                  "default": false
+                },
+                "title": {
+                  "type": "string",
+                  "title": "Title",
+                  "default": "",
+                  "_adapt": {
+                    "translatable": true
+                  }
+                },
+                "body": {
+                  "type": "string",
+                  "title": "Message",
+                  "description": "",
+                  "default": "Are you sure you want to try again? Remember, your scores will be reset and you must interact with all content again.",
+                  "_adapt": {
+                    "translatable": true
+                  }
+                },
+                "_buttons": {
+                  "type": "object",
+                  "title": "Buttons",
+                  "description": "The button text for the prompt",
+                  "default": {},
+                  "properties": {
+                    "yes": {
+                      "type": "string",
+                      "title": "Yes button text",
+                      "description": "",
+                      "default": "Yes",
+                      "_adapt": {
+                        "translatable": true
+                      }
+                    },
+                    "no": {
+                      "type": "string",
+                      "title": "No button text",
+                      "description": "",
+                      "default": "No",
+                      "_adapt": {
+                        "translatable": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "_completionBody": {
+          "type": "string",
+          "title": "Default feedback",
+          "description": "This text overwrites the standard body attribute upon completion of the scoring set. It can use the following variables: `{{{score}}}`, `{{{maxScore}}}`, `{{{scaledScore}}}`. If the associated scoring set contains attempts logic, `{{attemptsSpent}}`, `{{attempts}}`, `{{attemptsLeft}}` can also be used. The variable `{{{feedback}}}`, representing the feedback assigned to the appropriate band, is also allowed",
+          "default": "",
+          "_adapt": {
+            "translatable": true
+          },
+          "_backboneForms": "TextArea"
+        },
+        "_isBandsScoreScaled": {
+          "type": "boolean",
+          "title": "Set feedback bands score as percentage",
+          "description": "Determines whether feedback bands scoring is to be used as raw or percentage values",
+          "default": true
+        },
+        "_bands": {
+          "type": "array",
+          "title": "Feedback bands",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_score": {
+                "type": "number",
+                "title": "Minimum score",
+                "description": "Enter a value representing the raw or percentage scores for the start of the range",
+                "default": 0
+              },
+              "feedback": {
+                "type": "string",
+                "title": "Feedback",
+                "description": "This text will be displayed to the learner when the learner's score falls within this band's range",
+                "default": "",
+                "_adapt": {
+                  "translatable": true
+                },
+                "_backboneForms": "TextArea"
+              },
+              "_allowRetry": {
+                "type": "boolean",
+                "title": "Allow retry",
+                "description": "Determines whether the learner will be allowed to retry the scoring set. This setting will be ignored if any filtered scoring set cannot be reset",
+                "default": true
+              },
+              "_classes": {
+                "type": "string",
+                "title": "Custom article classes",
+                "description": "Classes to be applied to the containing article. Allows for custom styling based on the band the learner's score falls into",
+                "default": ""
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
