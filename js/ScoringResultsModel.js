@@ -99,7 +99,8 @@ export default class ScoringResultsModel extends ComponentModel {
   }
 
   onSetComplete(set) {
-    if (this.get('_setId') !== (set.id || '') || !this.get('_isRendered')) return;
+    const id = this.get('_setId');
+    if ((id !== set.id && id !== '') || !this.get('_isRendered')) return;
     const sets = this.getScoringSets();
     const score = sets.reduce((score, set) => score + set.score, 0);
     const minScore = sets.reduce((score, set) => score + set.minScore, 0);

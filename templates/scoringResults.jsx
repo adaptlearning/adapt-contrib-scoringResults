@@ -1,44 +1,47 @@
 import React from 'react';
-import { templates, classes, html, compile } from 'core/js/reactHelpers';
+import { templates, classes, compile } from 'core/js/reactHelpers';
 
-export default function SetResults(props) {
+export default function ScoringResults(props) {
 
   const {
     _isVisible,
     isPass,
     _isRetryEnabled,
-    retryFeedback
+    retryFeedback,
+    _retry
   } = props;
 
   if (!_isVisible) return null;
 
   return (
-    <div className='component__inner setresults__inner'>
+    <div className='component__inner scoringresults__inner'>
 
       <templates.header {...props} />
 
       <div
         className={classes([
           'component__widget',
-          'setresults__widget',
+          'scoringresults__widget',
           isPass ? 'is-passed' : 'is-failed'
         ])}
       >
 
         {_isRetryEnabled &&
-          <div className='component__feedback setresults__feedback'>
-            <div className='component__feedback-inner setresults__feedback-inner'>
+          <div className='component__feedback scoringresults__feedback'>
+            <div className='component__feedback-inner scoringresults__feedback-inner'>
 
               {retryFeedback &&
-                <div class="setresults__retry-feedback">
-                  <div class="setresults__retry-feedback-inner">
-                    {html(compile(retryFeedback))}
+                <div className='scoringresults__retry-feedback'>
+                  <div
+                    className='scoringresults__retry-feedback-inner'
+                    dangerouslySetInnerHTML={{ __html: compile(retryFeedback) }}
+                    >
                   </div>
                 </div>
               }
 
-              <button class="btn-text setresults__retry-btn js-set-retry-btn">
-                <span>{props._retry.button}</span>
+              <button className='btn-text scoringresults__retry-btn js-set-retry-btn'>
+                <span dangerouslySetInnerHTML={{ __html: _retry.button }}></span>
               </button>
 
             </div>

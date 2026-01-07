@@ -50,7 +50,7 @@
     },
     {
       "_score": 75,
-      "feedback": "Great work. You passed your assessment with {{{scoreAsPercent}}}%.",
+      "feedback": "Great work. You passed your assessment with {{{scaledScore}}}%.",
       "_allowRetry": false,
       "_classes": "high-score"
     }
