@@ -32,8 +32,8 @@
         "_setId": {
           "type": "string",
           "title": "Scoring set ID",
-          "description": "The scoring set ID to check for completion. Leave empty to use the Scoring API instead",
-          "default": ""
+          "description": "The scoring set ID to check for completion.",
+          "default": "total"
         },
         "_subsetsQuery": {
           "type": "string",

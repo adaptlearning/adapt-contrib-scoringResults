@@ -1,7 +1,7 @@
 {
   "name": "adapt-contrib-scoringResults",
   "version": "1.0.1",
-  "framework": ">=5.20",
+  "framework": ">=5.48.2",
   "homepage": "https://github.com/adaptlearning/adapt-contrib-scoringResults",
   "bugs": "https://github.com/adaptlearning/adapt-contrib-scoringResults/issues",
   "component": "scoringResults",
@@ -13,6 +13,9 @@
     "adapt-plugin",
     "adapt-component"
   ],
+  "pluginDependencies": {
+    "adapt-contrib-scoring": ">=2.0.0"
+  },
   "license": "GPL-3.0",
   "private": true,
   "devDependencies": {
