@@ -5,6 +5,7 @@ export default function ScoringResults(props) {
 
   const {
     _isVisible,
+    hasPassmark,
     isPass,
     _isRetryEnabled,
     retryFeedback,
@@ -22,7 +23,7 @@ export default function ScoringResults(props) {
         className={classes([
           'component__widget',
           'scoringresults__widget',
-          isPass ? 'is-passed' : 'is-failed'
+          hasPassmark && (isPass ? 'is-passed' : 'is-failed')
         ])}
       >
 

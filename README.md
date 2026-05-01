@@ -67,9 +67,7 @@ The attributes listed below are used in *components.json* to configure the compo
  * **\_classes** (string): Classes that will be applied to the containing article if the user's score falls into this band. Allows for custom styling based on the feedback band.
 
 ----------------------------
-**Version number:** 0.0.1 (pre-release)<br>
-**Framework versions:** 5.20+<br>
 **Author / maintainer:** Adapt Core Team with [contributors](https://github.com/adaptlearning/adapt-contrib-scoringResults/graphs/contributors)
 **Accessibility support:** WAI AA<br>
 **RTL support:** Yes<br>
-**Plugin dependenies:** [adapt-contrib-scoring](https://github.com/adaptlearning/adapt-contrib-scoring): ">=0.0.1"
+**Plugin dependenies:** [adapt-contrib-scoring](https://github.com/adaptlearning/adapt-contrib-scoring): ">=2.0.0"

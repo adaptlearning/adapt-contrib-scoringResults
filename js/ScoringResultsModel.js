@@ -1,9 +1,10 @@
 import Adapt from 'core/js/adapt';
 import Logging from 'core/js/logging';
 import ComponentModel from 'core/js/models/componentModel';
-import Scoring, {
-  getSubsetById,
+import {
+  getSetById,
   getSubsetsByQuery,
+  sum,
   getScaledScoreFromMinMax
 } from 'extensions/adapt-contrib-scoring/js/adapt-contrib-scoring';
 
@@ -12,12 +13,10 @@ export default class ScoringResultsModel extends ComponentModel {
   init(...args) {
     // save the original body text so we can restore it when the test is reset
     this.set('originalBody', this.get('body'));
-
     this.listenTo(Adapt, {
-      'scoring:set:complete scoring:complete': this.onSetComplete,
-      'scoring:set:reset scoring:reset': this.onSetReset
+      'scoring:set:complete': this.onSetComplete,
+      'scoring:set:reset': this.onSetReset
     });
-
     super.init(...args);
   }
 
@@ -29,13 +28,13 @@ export default class ScoringResultsModel extends ComponentModel {
   }
 
   checkCompletion() {
-    if (this.get('_setCompletionOn') === 'pass' && !this.get('isPass')) return;
+    if (this.get('_setCompletionOn') === 'pass' && this.get('hasPassmark') && !this.get('isPass')) return;
     this.setCompletionStatus();
   }
 
   getScoringSet() {
-    const id = this.get('_setId');
-    return id ? getSubsetById(id) : Scoring;
+    const id = this.get('_setId') || 'total';
+    return getSetById(id);
   }
 
   getScoringSets() {
@@ -54,7 +53,6 @@ export default class ScoringResultsModel extends ComponentModel {
   reset(...args) {
     const wasReset = super.reset(...args);
     if (!wasReset) return;
-
     this.set({
       body: this.get('originalBody'),
       _feedbackBand: null,
@@ -69,15 +67,13 @@ export default class ScoringResultsModel extends ComponentModel {
     const isScaled = this.get('_isBandsScoreScaled') ?? set?.passmark?.isScaled ?? true;
     const score = isScaled ? this.get('scaledScore') : this.get('score');
     const bands = this.get('_bands').sort((a, b) => b._score - a._score);
-    //const band = bands.find(band => score >= band._score) ?? bands.slice().pop();
     const band = bands.find(band => score >= band._score);
     if (!band) Logging.warn(`A _band could not be found for a score of ${score} in ${this.get('_id')}`);
     // ensure any handlebars expressions in the `feedback` are handled
     const feedback = band ? Handlebars.compile(band.feedback)(this.toJSON()) : '';
-
     this.set({
       _feedbackBand: band,
-      feedback: feedback,
+      feedback,
       body: this.get('_completionBody')
     });
   }
@@ -99,23 +95,21 @@ export default class ScoringResultsModel extends ComponentModel {
   }
 
   onSetComplete(set) {
-    const id = this.get('_setId');
-    if ((id !== set.id && id !== '') || !this.get('_isRendered')) return;
+    if (this.getScoringSet().id !== set.id || !this.get('_isRendered')) return;
     const sets = this.getScoringSets();
-    const score = sets.reduce((score, set) => score + set.score, 0);
-    const minScore = sets.reduce((score, set) => score + set.minScore, 0);
-    const maxScore = sets.reduce((score, set) => score + set.maxScore, 0);
+    const score = sum(sets, 'score');
+    const minScore = sum(sets, 'minScore');
+    const maxScore = sum(sets, 'maxScore');
     const scaledScore = getScaledScoreFromMinMax(score, minScore, maxScore);
     const canReset = sets.every(set => set?.canReset);
     const attempts = set?.attempts;
-
     const data = {
-      score: score,
-      maxScore: maxScore,
-      scaledScore: scaledScore,
+      score,
+      maxScore,
+      scaledScore,
+      hasPassmark: set.hasPassmark,
       isPass: set.isPassed
     };
-
     if (attempts) {
       Object.assign(data, {
         attempts: attempts?.limit,
@@ -123,7 +117,6 @@ export default class ScoringResultsModel extends ComponentModel {
         attemptsLeft: attempts?.remaining
       });
     }
-
     this.set(data);
     this._setFeedback();
     if (canReset) this._setRetryEnabled();
@@ -132,9 +125,9 @@ export default class ScoringResultsModel extends ComponentModel {
   }
 
   onSetReset(set) {
-    if (this.get('_setId') !== (set.id || '')) return;
+    if (this.getScoringSet().id !== set.id) return;
     let resetType = this.get('_resetType');
-    if (!resetType || resetType === 'inherit') resetType = set?.resetConfig?._nonScoringType ?? 'hard';
+    if (!resetType || resetType === 'inherit') resetType = set?.resetConfig?.questionsType ?? 'hard';
     this.reset(resetType, true);
     this._setVisibility();
   }
